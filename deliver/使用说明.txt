@@ -1,0 +1,45 @@
+RemoteControl 使用说明 (2026-09-27 更新)
+=========================================
+
+deliver 目录内容
+----------------
+  被控端_RemoteControl.exe      被控端(Windows, 需管理员权限)
+  控制端_client.exe             控制端(Windows, 含“生成安卓被控端”功能)
+  RemoteControl.exe             被控端(与 被控端_ 同版本, 保持旧文件名兼容)
+  client.exe                    控制端(旧版, 若被占用请关闭后覆盖为 控制端_client.exe)
+  安卓被控端_RCAndroidAgent.apk 安卓被控端安装包(与控制端内置的一致)
+
+一、Windows 被控端
+----------------
+ 1. 把 被控端_RemoteControl.exe 拷到被控机, 双击运行(UAC 弹窗点“是”, 程序自带 requireAdministrator 自动提权)。
+ 2. 主界面选“开机自启动”勾选/按钮 → 程序会写注册计划任务 “RemoteControlAutostart”(ONLOGON, 最高权限)。
+    命令行: RemoteControl.exe autostart on | off | status
+ 3. 记下界面显示的本机 IP 与端口(默认 9000)。
+
+二、Windows 控制端
+----------------
+ 1. 运行 控制端_client.exe, 输入被控端 IP/端口 → 连接。
+ 2. 生成安卓被控端: 切到「工具」页 → 点「生成安卓被控端」→ 选保存位置 → 得到 RCAndroidAgent.apk。
+    (等价命令行: 在控制台输入 apk 或 androidapk 回车)
+ 3. 小技巧: 把最新的 RCAndroidAgent.apk 放在 client.exe 同目录, 点按钮时会优先打包该文件(便于热替换)。
+
+三、安卓被控端 (RCAndroidAgent.apk)
+----------------
+ 1. 手机/平板安装该 APK(设置里允许“未知来源安装”)。已用自签名证书(CN=RC Agent), 首次安装如提示风险选“继续”。
+ 2. 打开 App, 服务器地址填 “控制端所在电脑的IP:端口”(如 192.168.1.10:9000), 点「授权屏幕采集并启动服务」→ 系统录屏弹窗点“立即开始”。
+ 3. 如需远程触摸/按键: 到 系统设置 → 无障碍 → 找到本 App(远程控制)并开启。
+ 4. 回到控制端点「连接」→ 即可看到手机画面; 鼠标点击/拖动会映射为手机触摸。
+
+四、安卓被控端源码与重新打包(可选)
+----------------
+ 源码: F:\cpp interview\GenericAgent-main\temp\android\  (AndroidManifest.xml / res / src / build.py)
+ 打包: python build.py   → 生成 RCAndroidAgent.apk 并签名验证
+ 依赖: D:\andorid\jbr\bin\javac|java, temp\tools\bt\{aapt2,d8,zipalign,apksigner}, android.jar (android-34)
+ 重新打包后: 把新 APK 覆盖到控制端 exe 同目录的同名文件即可被“生成安卓被控端”按钮选中使用。
+
+五、已验证 / 未验证
+----------------
+ 已验证: 被控端开机自启(计划任务 + Run 键回退)、APK 打包与签名、控制端一键生成(生成结果与源 APK 字节一致)、
+         Windows 被控端/控制端原有功能编译通过。
+ 未验证: 安卓被控端在真机上的连接/画面/触摸(本机无 adb 与安卓设备), 请在手机上实测; 若连不上先确认同一局域网、
+         手机 App 内提示的监听状态、以及 Windows 防火墙是否放行 9000 端口(入站)。

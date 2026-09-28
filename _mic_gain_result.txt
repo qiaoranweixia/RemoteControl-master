@@ -1,0 +1,3 @@
+LIST_OK=True
+RMS100=5.3 RMS800=33.4 ratio=6.29
+DEV1=ok:mic starting (��˷� packet=40ms dev=1 gain=100%)

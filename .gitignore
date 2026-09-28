@@ -1,0 +1,32 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.slnx
+*.vcxproj.filters
+*.FileListAbsolute.txt
+
+# Build outputs
+x64/
+*/x64/
+
+# VS logs and intermediates
+*.tlog/
+*.ipch/
+*.iobj/
+*.ipdb/
+*.obj
+*.pdb
+*.ilk
+*.recipe
+*.log
+!README.md
+
+# Test artifacts
+test.png
+
+# IDE
+Browse.VC.db
+Solution.VC.db
+DocumentLayout.json
+DocumentLayout.backup.json
